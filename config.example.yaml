@@ -1,0 +1,65 @@
+# MCPRelay Configuration Example
+# Copy this to config.yaml and customize for your deployment
+
+# Server settings
+host: "0.0.0.0"
+port: 8080
+workers: 1
+
+# MCP servers to proxy
+servers:
+  - name: "hue-controller"
+    url: "http://localhost:3001"
+    timeout: 30
+    max_retries: 3
+    health_check_path: "/health"
+    weight: 1
+    tags: ["smart-home", "lighting"]
+  
+  - name: "github-integration"
+    url: "http://localhost:3002" 
+    timeout: 45
+    max_retries: 2
+    weight: 2
+    tags: ["development", "git"]
+
+# Authentication
+auth:
+  enabled: true
+  method: "api_key"  # api_key, jwt, oauth
+  api_keys:
+    "demo-key-123": "demo-user"
+    "admin-key-456": "admin-user"
+
+# Rate limiting
+rate_limit:
+  enabled: true
+  default_requests_per_minute: 60
+  burst_size: 10
+  per_user_limits:
+    "admin-user": 120
+    "demo-user": 30
+
+# Metrics and monitoring
+metrics:
+  enabled: true
+  port: 9090
+  path: "/metrics"
+
+# Logging
+logging:
+  level: "INFO"
+  format: "json"  # json, text
+  access_log: true
+  audit_log: true
+
+# Redis (optional, for scaling)
+redis:
+  enabled: false
+  url: "redis://localhost:6379"
+  db: 0
+  prefix: "mcprelay:"
+
+# Load balancing
+load_balance_strategy: "round_robin"  # round_robin, weighted, least_connections
+health_check_interval: 30
