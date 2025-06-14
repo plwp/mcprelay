@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Metrics - MCPRelay Admin{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-gray-900">Performance Metrics</h2>
+    <p class="text-gray-600">Real-time monitoring and analytics.</p>
+</div>
+
+<!-- Key Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-chart-line text-2xl text-blue-500"></i>
+            </div>
+            <div class="ml-5">
+                <p class="text-sm font-medium text-gray-500">Total Requests</p>
+                <p class="text-2xl font-bold text-gray-900">1,247</p>
+                <p class="text-xs text-green-600">↑ 12% from yesterday</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-clock text-2xl text-green-500"></i>
+            </div>
+            <div class="ml-5">
+                <p class="text-sm font-medium text-gray-500">Avg Response Time</p>
+                <p class="text-2xl font-bold text-gray-900">145ms</p>
+                <p class="text-xs text-green-600">↓ 8% from yesterday</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-circle text-2xl text-red-500"></i>
+            </div>
+            <div class="ml-5">
+                <p class="text-sm font-medium text-gray-500">Error Rate</p>
+                <p class="text-2xl font-bold text-gray-900">0.24%</p>
+                <p class="text-xs text-red-600">↑ 0.1% from yesterday</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-shield-alt text-2xl text-yellow-500"></i>
+            </div>
+            <div class="ml-5">
+                <p class="text-sm font-medium text-gray-500">Blocked Requests</p>
+                <p class="text-2xl font-bold text-gray-900">15</p>
+                <p class="text-xs text-yellow-600">Security safeguards</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Request Volume</h3>
+        </div>
+        <div class="p-6">
+            <div class="h-64 flex items-end justify-between space-x-1">
+                <div class="bg-blue-500 w-8 h-32 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-24 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-40 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-36 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-28 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-44 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-52 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-48 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-56 rounded-t"></div>
+                <div class="bg-blue-500 w-8 h-60 rounded-t"></div>
+            </div>
+            <div class="flex justify-between mt-2 text-xs text-gray-500">
+                <span>00:00</span>
+                <span>06:00</span>
+                <span>12:00</span>
+                <span>18:00</span>
+                <span>24:00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Response Times</h3>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-sm">
+                        <span>P50</span>
+                        <span>98ms</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm">
+                        <span>P95</span>
+                        <span>245ms</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-yellow-500 h-2 rounded-full" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm">
+                        <span>P99</span>
+                        <span>412ms</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Server Status -->
+<div class="bg-white rounded-lg shadow">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900">Backend Server Status</h3>
+    </div>
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+                <div class="inline-flex items-center p-3 rounded-full bg-green-100">
+                    <i class="fas fa-server text-green-600 text-xl"></i>
+                </div>
+                <h4 class="text-lg font-medium text-gray-900 mt-2">hue-server-1</h4>
+                <p class="text-sm text-gray-500">752 requests</p>
+                <p class="text-sm text-green-600">Healthy • 98ms avg</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="inline-flex items-center p-3 rounded-full bg-green-100">
+                    <i class="fas fa-server text-green-600 text-xl"></i>
+                </div>
+                <h4 class="text-lg font-medium text-gray-900 mt-2">hue-server-2</h4>
+                <p class="text-sm text-gray-500">495 requests</p>
+                <p class="text-sm text-green-600">Healthy • 112ms avg</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="inline-flex items-center p-3 rounded-full bg-red-100">
+                    <i class="fas fa-server text-red-600 text-xl"></i>
+                </div>
+                <h4 class="text-lg font-medium text-gray-900 mt-2">backup-server</h4>
+                <p class="text-sm text-gray-500">0 requests</p>
+                <p class="text-sm text-red-600">Unhealthy • Timeout</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

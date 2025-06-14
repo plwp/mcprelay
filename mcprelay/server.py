@@ -17,6 +17,7 @@ from .auth import get_current_user, AuthContext, init_auth_manager
 from .rate_limit import rate_limit_check, init_rate_limiter
 from .mcp import MCPRequestValidator, MCPResponseSanitizer
 from .load_balancer import LoadBalancer
+from .web_ui import router as web_ui_router
 
 logger = structlog.get_logger()
 
@@ -159,6 +160,9 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
     
     # Initialize relay
     relay = MCPRelay(config)
+    
+    # Include web UI router
+    app.include_router(web_ui_router)
     
     @app.on_event("startup")
     async def startup():

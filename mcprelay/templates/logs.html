@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Logs - MCPRelay Admin{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <h2 class="text-2xl font-bold text-gray-900">System Logs</h2>
+    <div class="flex space-x-2">
+        <select class="border-gray-300 rounded-md shadow-sm text-sm">
+            <option>All Levels</option>
+            <option>ERROR</option>
+            <option>WARN</option>
+            <option>INFO</option>
+            <option>DEBUG</option>
+        </select>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm">
+            <i class="fas fa-sync mr-1"></i>Refresh
+        </button>
+    </div>
+</div>
+
+<div class="bg-white shadow rounded-lg">
+    <div class="p-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">Showing latest 100 entries</span>
+            <label class="flex items-center">
+                <input type="checkbox" class="rounded border-gray-300 mr-2">
+                <span class="text-sm text-gray-700">Auto-refresh</span>
+            </label>
+        </div>
+    </div>
+    
+    <div class="font-mono text-sm bg-gray-900 text-green-400 p-4 h-96 overflow-y-auto">
+        <div class="space-y-1">
+            <div class="flex">
+                <span class="text-gray-500 w-24">2024-01-15</span>
+                <span class="text-gray-500 w-24">14:32:15</span>
+                <span class="text-blue-400 w-16">INFO</span>
+                <span class="text-white">MCPRelay starting up with 2 backend servers</span>
+            </div>
+            <div class="flex">
+                <span class="text-gray-500 w-24">2024-01-15</span>
+                <span class="text-gray-500 w-24">14:32:16</span>
+                <span class="text-green-400 w-16">INFO</span>
+                <span class="text-white">Health check passed for hue-server-1</span>
+            </div>
+            <div class="flex">
+                <span class="text-gray-500 w-24">2024-01-15</span>
+                <span class="text-gray-500 w-24">14:32:17</span>
+                <span class="text-yellow-400 w-16">WARN</span>
+                <span class="text-white">Health check failed for backup-server: timeout</span>
+            </div>
+            <div class="flex">
+                <span class="text-gray-500 w-24">2024-01-15</span>
+                <span class="text-gray-500 w-24">14:33:42</span>
+                <span class="text-blue-400 w-16">INFO</span>
+                <span class="text-white">Request proxied to hue-server-1: POST /mcp/lights/toggle</span>
+            </div>
+            <div class="flex">
+                <span class="text-gray-500 w-24">2024-01-15</span>
+                <span class="text-gray-500 w-24">14:33:45</span>
+                <span class="text-red-400 w-16">ERROR</span>
+                <span class="text-white">MCP request blocked: dangerous operation detected</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
