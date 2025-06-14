@@ -70,6 +70,11 @@ class MCPRelayConfig(BaseSettings):
     host: str = Field("0.0.0.0", description="Server host")
     port: int = Field(8080, description="Server port")
     workers: int = Field(1, description="Number of worker processes")
+    debug_mode: bool = Field(False, description="Enable debug mode")
+    
+    # Security settings
+    mcp_safeguards_enabled: bool = Field(True, description="Enable MCP request/response safeguards")
+    allowed_origins: List[str] = Field(default_factory=lambda: ["*"], description="CORS allowed origins")
     
     # MCP servers
     servers: List[MCPServerConfig] = Field(default_factory=list, description="MCP servers to proxy")
