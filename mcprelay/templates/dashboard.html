@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MCPRelay Admin{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Status Cards -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-server text-2xl text-green-500"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Backend Servers</dt>
+                    <dd class="text-lg font-medium text-gray-900" hx-get="/admin/api/stats/servers" hx-trigger="load, every 30s">
+                        <span class="text-green-600">2</span> / 3
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-tachometer-alt text-2xl text-blue-500"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Requests/Min</dt>
+                    <dd class="text-lg font-medium text-gray-900" hx-get="/admin/api/stats/rps" hx-trigger="load, every 5s">
+                        156
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-users text-2xl text-purple-500"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Active Users</dt>
+                    <dd class="text-lg font-medium text-gray-900" hx-get="/admin/api/stats/users" hx-trigger="load, every 30s">
+                        12
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-triangle text-2xl text-yellow-500"></i>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+                <dl>
+                    <dt class="text-sm font-medium text-gray-500 truncate">Blocked Requests</dt>
+                    <dd class="text-lg font-medium text-gray-900" hx-get="/admin/api/stats/blocked" hx-trigger="load, every 30s">
+                        3
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Recent Requests</h3>
+        </div>
+        <div class="p-6">
+            <div class="flow-root">
+                <ul role="list" class="-mb-8" hx-get="/admin/api/recent-requests" hx-trigger="load, every 10s">
+                    <li>
+                        <div class="relative pb-8">
+                            <div class="relative flex space-x-3">
+                                <div>
+                                    <span class="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center ring-8 ring-white">
+                                        <i class="fas fa-check text-white text-xs"></i>
+                                    </span>
+                                </div>
+                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">POST /mcp/lights/toggle <span class="font-medium text-gray-900">user123</span></p>
+                                    </div>
+                                    <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                        <time>2 min ago</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="relative pb-8">
+                            <div class="relative flex space-x-3">
+                                <div>
+                                    <span class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center ring-8 ring-white">
+                                        <i class="fas fa-times text-white text-xs"></i>
+                                    </span>
+                                </div>
+                                <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">POST /mcp/system/exec <span class="font-medium text-gray-900">baduser</span></p>
+                                        <p class="text-xs text-red-600">Blocked: Dangerous operation</p>
+                                    </div>
+                                    <div class="text-right text-sm whitespace-nowrap text-gray-500">
+                                        <time>5 min ago</time>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">System Health</h3>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4" hx-get="/admin/api/health-status" hx-trigger="load, every 15s">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-green-400 text-lg">●</span>
+                        <span class="ml-2 text-sm font-medium text-gray-900">hue-server-1</span>
+                    </div>
+                    <span class="text-sm text-gray-500">98ms</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-green-400 text-lg">●</span>
+                        <span class="ml-2 text-sm font-medium text-gray-900">hue-server-2</span>
+                    </div>
+                    <span class="text-sm text-gray-500">112ms</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="text-red-400 text-lg">●</span>
+                        <span class="ml-2 text-sm font-medium text-gray-900">backup-server</span>
+                    </div>
+                    <span class="text-sm text-red-500">Timeout</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-8 bg-white rounded-lg shadow">
+    <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900">Quick Actions</h3>
+    </div>
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-plus mr-2"></i>
+                Add Server
+            </button>
+            <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    hx-post="/admin/api/reload-config">
+                <i class="fas fa-sync mr-2"></i>
+                Reload Config
+            </button>
+            <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <i class="fas fa-download mr-2"></i>
+                Export Logs
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
