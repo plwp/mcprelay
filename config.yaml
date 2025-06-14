@@ -1,0 +1,35 @@
+allowed_origins:
+- '*'
+auth:
+  api_keys: {}
+  enabled: true
+  jwt_algorithm: HS256
+  jwt_secret: null
+  method: api_key
+debug_mode: false
+health_check_interval: 30
+host: 0.0.0.0
+load_balance_strategy: round_robin
+logging:
+  access_log: true
+  audit_log: true
+  format: json
+  level: INFO
+mcp_safeguards_enabled: true
+metrics:
+  enabled: true
+  path: /metrics
+  port: 9090
+port: 8080
+rate_limit:
+  burst_size: 10
+  default_requests_per_minute: 60
+  enabled: true
+  per_user_limits: {}
+redis:
+  db: 0
+  enabled: false
+  prefix: 'mcprelay:'
+  url: redis://localhost:6379
+servers: []
+workers: 1
