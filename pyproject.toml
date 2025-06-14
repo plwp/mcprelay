@@ -1,0 +1,99 @@
+[project]
+name = "mcprelay"
+version = "0.1.0"
+description = "Enterprise-grade MCP gateway for secure, scalable Model Context Protocol deployments"
+authors = [{name = "PLWP", email = "dev@mcprelay.org"}]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+keywords = [
+    "mcp", "model-context-protocol", "gateway", "proxy", "enterprise", 
+    "security", "api-gateway", "fastapi", "authentication", "rate-limiting"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Security",
+    "Topic :: System :: Networking",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "httpx>=0.25.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "prometheus-client>=0.19.0",
+    "redis>=5.0.0",
+    "pyyaml>=6.0.1",
+    "click>=8.1.0",
+    "structlog>=23.2.0",
+    "asyncio-mqtt>=0.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.10.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "pre-commit>=3.5.0",
+]
+enterprise = [
+    "authlib>=1.2.0",
+    "python-ldap>=3.4.0",
+    "cryptography>=41.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/plwp/mcprelay"
+Repository = "https://github.com/plwp/mcprelay"
+Issues = "https://github.com/plwp/mcprelay/issues"
+Documentation = "https://mcprelay.org/docs"
+
+[project.scripts]
+mcprelay = "mcprelay.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = ["E", "F", "W", "C90", "I", "N", "B", "A", "S", "T20", "Q"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=mcprelay",
+    "--cov-report=term-missing",
+]
