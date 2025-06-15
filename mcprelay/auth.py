@@ -137,6 +137,7 @@ async def get_current_user(
 
     # Execute pre-auth hooks
     from .plugins import get_plugin_manager
+
     plugin_manager = get_plugin_manager()
     if plugin_manager:
         await plugin_manager.execute_hook("pre_auth", request)
@@ -144,11 +145,11 @@ async def get_current_user(
     if not auth_manager.config.auth.enabled:
         # Auth disabled - return default context
         auth_context = AuthContext(user_id="anonymous", request_id=str(uuid.uuid4()))
-        
+
         # Execute post-auth hooks
         if plugin_manager:
             await plugin_manager.execute_hook("post_auth", auth_context)
-        
+
         return auth_context
 
     # Try different auth methods

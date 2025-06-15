@@ -8,8 +8,8 @@ Enterprise plugins can implement their own license validation logic.
 # Import the simple plugin system
 from .simple import (
     Plugin,
-    PluginHook, 
+    PluginHook,
     SimplePluginManager,
+    get_plugin_manager,
     init_plugin_manager,
-    get_plugin_manager
 )

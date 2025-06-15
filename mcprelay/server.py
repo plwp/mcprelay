@@ -17,10 +17,10 @@ from prometheus_client import (
 
 from .auth import AuthContext, get_current_user, init_auth_manager
 from .config import MCPRelayConfig
-from .license import init_license_manager, get_license_manager
+from .license import get_license_manager, init_license_manager
 from .load_balancer import LoadBalancer
 from .mcp import MCPRequestValidator, MCPResponseSanitizer
-from .plugins import init_plugin_manager, get_plugin_manager
+from .plugins import get_plugin_manager, init_plugin_manager
 from .rate_limit import init_rate_limiter, rate_limit_check
 from .web_ui import router as web_ui_router
 
@@ -60,7 +60,9 @@ class MCPRelay:
                 # Execute pre-request hooks
                 plugin_manager = get_plugin_manager()
                 if plugin_manager:
-                    await plugin_manager.execute_hook("pre_request", request, auth_context)
+                    await plugin_manager.execute_hook(
+                        "pre_request", request, auth_context
+                    )
                 # Get target server
                 target_server = await self.load_balancer.get_server(
                     user_id=auth_context.user_id, path=path
@@ -141,7 +143,9 @@ class MCPRelay:
 
                 # Execute post-response hooks
                 if plugin_manager:
-                    await plugin_manager.execute_hook("post_response", final_response, auth_context)
+                    await plugin_manager.execute_hook(
+                        "post_response", final_response, auth_context
+                    )
 
                 return final_response
 
@@ -187,23 +191,24 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
     async def startup():
         """Application startup."""
         logger.info("MCPRelay starting up", config=config.model_dump())
-        
+
         # Initialize license manager
         license_manager = init_license_manager(
-            config.enterprise.license_key,
-            config.enterprise.license_file
+            config.enterprise.license_key, config.enterprise.license_file
         )
-        
+
         # Initialize plugin manager
         plugin_manager = init_plugin_manager(license_manager)
-        
+
         # Load plugins if enabled
         if config.plugins.enabled:
-            await plugin_manager.discover_and_load_plugins(config.plugins.plugin_packages)
-        
+            await plugin_manager.discover_and_load_plugins(
+                config.plugins.plugin_packages
+            )
+
         # Execute startup hooks
         await plugin_manager.execute_hook("server_startup", config)
-        
+
         init_auth_manager(config)
         init_rate_limiter(config)
         await relay.load_balancer.start_health_checks()
@@ -212,13 +217,13 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
     async def shutdown():
         """Application shutdown."""
         logger.info("MCPRelay shutting down")
-        
+
         # Execute shutdown hooks
         plugin_manager = get_plugin_manager()
         if plugin_manager:
             await plugin_manager.execute_hook("server_shutdown")
             await plugin_manager.shutdown_all_plugins()
-        
+
         await relay.client.aclose()
         await relay.load_balancer.stop_health_checks()
 
@@ -279,7 +284,9 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
                 k: "***" for k in safe_config["auth"]["api_keys"]
             }
         if "enterprise" in safe_config and "license_key" in safe_config["enterprise"]:
-            safe_config["enterprise"]["license_key"] = "***" if safe_config["enterprise"]["license_key"] else None
+            safe_config["enterprise"]["license_key"] = (
+                "***" if safe_config["enterprise"]["license_key"] else None
+            )
 
         return safe_config
 

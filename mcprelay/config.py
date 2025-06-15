@@ -74,10 +74,12 @@ class PluginConfig(BaseModel):
     """Plugin system configuration."""
 
     enabled: bool = Field(True, description="Enable plugin system")
-    enterprise_plugins: bool = Field(True, description="Load enterprise plugins if available")
+    enterprise_plugins: bool = Field(
+        True, description="Load enterprise plugins if available"
+    )
     plugin_packages: List[str] = Field(
-        default_factory=lambda: ["mcprelay_enterprise.plugins"], 
-        description="Python packages to search for plugins"
+        default_factory=lambda: ["mcprelay_enterprise.plugins"],
+        description="Python packages to search for plugins",
     )
     plugin_configs: Dict[str, Dict] = Field(
         default_factory=dict, description="Per-plugin configuration"
