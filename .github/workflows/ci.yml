@@ -34,13 +34,24 @@ jobs:
         python -m pip install --upgrade pip
         pip install -e ".[dev]"
 
-    - name: Lint with ruff
+    - name: Auto-fix code quality
       run: |
-        ruff check mcprelay/ tests/
-
-    - name: Format check with black
-      run: |
-        black --check mcprelay/ tests/
+        # Configure git for automated commits
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Run ruff auto-fixes
+        ruff check --fix mcprelay/ tests/ || true
+        
+        # Run black formatting
+        black mcprelay/ tests/
+        
+        # Commit any changes
+        git add -A
+        if ! git diff --staged --quiet; then
+          git commit -m "Auto-fix linting and formatting issues"
+          git push
+        fi
 
     - name: Type check with mypy
       run: |
