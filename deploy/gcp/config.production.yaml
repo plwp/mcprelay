@@ -21,7 +21,6 @@ auth:
   enabled: true
   method: "api_key"
   jwt_algorithm: "HS256"
-  jwt_secret: null  # Set via environment variable
   api_keys: {}      # Set via environment variable
 
 # Rate limiting
@@ -37,7 +36,7 @@ mcp_safeguards_enabled: true
 # Redis - can be enabled with Cloud Memorystore
 redis:
   enabled: false
-  url: null  # Set via environment variable if needed
+  url: "redis://localhost:6379"  # Default URL when disabled
   db: 0
   prefix: "mcprelay:"
 
