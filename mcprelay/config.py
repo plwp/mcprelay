@@ -93,11 +93,11 @@ class MCPRelayConfig(BaseSettings):
     )
 
     # Feature configurations
-    auth: AuthConfig = Field(default_factory=AuthConfig)
-    rate_limit: RateLimitConfig = Field(default_factory=RateLimitConfig)
-    metrics: MetricsConfig = Field(default_factory=MetricsConfig)
-    logging: LoggingConfig = Field(default_factory=LoggingConfig)
-    redis: RedisConfig = Field(default_factory=RedisConfig)
+    auth: AuthConfig = Field(default_factory=lambda: AuthConfig())
+    rate_limit: RateLimitConfig = Field(default_factory=lambda: RateLimitConfig())
+    metrics: MetricsConfig = Field(default_factory=lambda: MetricsConfig())
+    logging: LoggingConfig = Field(default_factory=lambda: LoggingConfig())
+    redis: RedisConfig = Field(default_factory=lambda: RedisConfig())
 
     # Load balancing
     load_balance_strategy: str = Field(

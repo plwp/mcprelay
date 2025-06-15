@@ -45,8 +45,9 @@ def serve(config: Path, host: str, port: int, reload: bool):
         cfg.port = port
 
     # Cloud Run sets PORT environment variable
-    if os.getenv("PORT"):
-        cfg.port = int(os.getenv("PORT"))
+    port_env = os.getenv("PORT")
+    if port_env:
+        cfg.port = int(port_env)
 
     # Ensure we bind to all interfaces in containerized environments
     if os.getenv("ENVIRONMENT") == "production":

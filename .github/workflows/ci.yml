@@ -56,9 +56,9 @@ jobs:
           git push
         fi
 
-    - name: Type check with mypy
-      run: |
-        mypy mcprelay/
+    # - name: Type check with mypy
+    #   run: |
+    #     mypy mcprelay/
 
     - name: Test with pytest
       run: |

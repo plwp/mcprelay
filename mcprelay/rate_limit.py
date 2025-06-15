@@ -19,7 +19,7 @@ class TokenBucket:
 
     def __init__(self, capacity: int, refill_rate: float):
         self.capacity = capacity
-        self.tokens = capacity
+        self.tokens: float = float(capacity)
         self.refill_rate = refill_rate
         self.last_refill = time.time()
         self._lock = asyncio.Lock()
@@ -60,14 +60,14 @@ class RateLimiter:
 
         # Check per-user limits first
         if user_id in self.config.rate_limit.per_user_limits:
-            return self.config.rate_limit.per_user_limits[user_id]
+            return int(self.config.rate_limit.per_user_limits[user_id])
 
         # Admin users get higher limits
         if auth_context.is_admin:
-            return self.config.rate_limit.default_requests_per_minute * 3
+            return int(self.config.rate_limit.default_requests_per_minute * 3)
 
         # Default limit
-        return self.config.rate_limit.default_requests_per_minute
+        return int(self.config.rate_limit.default_requests_per_minute)
 
     async def check_rate_limit(self, auth_context: AuthContext) -> bool:
         """Check if request is within rate limit."""
