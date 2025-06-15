@@ -9,11 +9,11 @@
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg">
+    <nav class="bg-black text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-4">
-                    <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center space-x-6">
+                    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
@@ -58,12 +58,12 @@
                             <line x1="-12" y1="8" x2="-4" y2="11" stroke="url(#apiGradient)" stroke-width="1.5" opacity="0.6"/>
                         </g>
                     </svg>
-                    <h1 class="text-xl font-bold">MCPRelay</h1>
+                    <h1 class="text-2xl font-bold tracking-wide">MCPRelay</h1>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <a href="#features" class="hover:text-green-200">Features</a>
-                    <a href="#docs" class="hover:text-green-200">Documentation</a>
-                    <a href="https://github.com/plwp/mcprelay" class="hover:text-green-200">
+                    <a href="#features" class="hover:text-gray-300 transition-colors">Features</a>
+                    <a href="#docs" class="hover:text-gray-300 transition-colors">Documentation</a>
+                    <a href="https://github.com/plwp/mcprelay" class="hover:text-gray-300 transition-colors">
                         <i class="fab fa-github mr-2"></i>GitHub
                     </a>
                 </div>
@@ -72,20 +72,71 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-purple-600 via-blue-600 to-green-600 text-white py-20">
+    <section class="bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 text-white py-24">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-5xl font-bold mb-6">MCPRelay</h1>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">
+            <div class="flex justify-center mb-8">
+                <svg width="120" height="120" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="aiGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="apiGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="relayGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="glowHero">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                            <feMerge> 
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <g transform="translate(8, 50) scale(1.2)">
+                        <circle cx="0" cy="-15" r="4" fill="url(#aiGradientHero)" opacity="0.8"/>
+                        <circle cx="0" cy="0" r="4" fill="url(#aiGradientHero)"/>
+                        <circle cx="0" cy="15" r="4" fill="url(#aiGradientHero)" opacity="0.8"/>
+                        <line x1="4" y1="-15" x2="12" y2="-8" stroke="url(#aiGradientHero)" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="4" y1="0" x2="12" y2="-8" stroke="url(#aiGradientHero)" stroke-width="2"/>
+                        <line x1="4" y1="0" x2="12" y2="8" stroke="url(#aiGradientHero)" stroke-width="2"/>
+                        <line x1="4" y1="15" x2="12" y2="8" stroke="url(#aiGradientHero)" stroke-width="1.5" opacity="0.6"/>
+                    </g>
+                    <g transform="translate(50, 50) scale(1.2)">
+                        <circle cx="0" cy="0" r="12" fill="none" stroke="url(#relayGradientHero)" stroke-width="2" opacity="0.4"/>
+                        <circle cx="0" cy="0" r="6" fill="url(#relayGradientHero)" filter="url(#glowHero)"/>
+                    </g>
+                    <g transform="translate(92, 50) scale(1.2)">
+                        <rect x="-4" y="-15" width="8" height="8" rx="1" fill="url(#apiGradientHero)" opacity="0.8"/>
+                        <rect x="-4" y="-4" width="8" height="8" rx="1" fill="url(#apiGradientHero)"/>
+                        <rect x="-4" y="7" width="8" height="8" rx="1" fill="url(#apiGradientHero)" opacity="0.8"/>
+                        <line x1="-12" y1="-8" x2="-4" y2="-11" stroke="url(#apiGradientHero)" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="-12" y1="-8" x2="-4" y2="0" stroke="url(#apiGradientHero)" stroke-width="2"/>
+                        <line x1="-12" y1="8" x2="-4" y2="0" stroke="url(#apiGradientHero)" stroke-width="2"/>
+                        <line x1="-12" y1="8" x2="-4" y2="11" stroke="url(#apiGradientHero)" stroke-width="1.5" opacity="0.6"/>
+                    </g>
+                </svg>
+            </div>
+            <h1 class="text-6xl font-bold mb-6 tracking-tight">
+                <span class="bg-gradient-to-r from-purple-400 via-blue-400 to-green-400 bg-clip-text text-transparent">
+                    MCPRelay
+                </span>
+            </h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto text-gray-200">
                 Enterprise-grade gateway for Model Context Protocol (MCP) servers. 
                 Secure, scalable, and production-ready.
             </p>
             <div class="flex justify-center space-x-4">
                 <a href="https://github.com/plwp/mcprelay" 
-                   class="bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                   class="bg-white text-gray-800 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all shadow-lg">
                     <i class="fab fa-github mr-2"></i>Get Started
                 </a>
                 <a href="#demo" 
-                   class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition">
+                   class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-gray-800 transition-all">
                     View Demo
                 </a>
             </div>
