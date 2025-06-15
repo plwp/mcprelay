@@ -3,7 +3,7 @@ name = "mcprelay"
 version = "0.1.0"
 description = "Enterprise-grade MCP gateway for secure, scalable Model Context Protocol deployments"
 authors = [{name = "PLWP", email = "dev@mcprelay.org"}]
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 keywords = [
@@ -16,8 +16,7 @@ classifiers = [
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
     "Topic :: Security",
     "Topic :: System :: Networking",
@@ -77,15 +76,15 @@ build-backend = "hatchling.build"
 
 [tool.black]
 line-length = 88
-target-version = ["py311"]
+target-version = ["py313"]
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py313"
 select = ["E", "F", "W", "C90", "I", "N", "B", "A", "S", "T20", "Q"]
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.13"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
