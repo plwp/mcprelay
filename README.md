@@ -1,83 +1,86 @@
 # MCPRelay
 
-Enterprise-grade MCP gateway for secure, scalable Model Context Protocol deployments.
+Enterprise-grade gateway for Model Context Protocol (MCP) servers. Secure, scalable, and production-ready.
 
-## Vision
+## Overview
 
-Build the "nginx for MCP" - essential infrastructure that every company needs to safely deploy MCP servers in production.
+MCPRelay is an open-source API gateway designed specifically for MCP (Model Context Protocol) servers. It provides enterprise-grade security, authentication, rate limiting, and monitoring capabilities for production MCP deployments.
 
-## Market Opportunity
+## Features
 
-- **Security gap**: MCP servers currently deployed with no enterprise controls
-- **First-mover advantage**: No existing enterprise MCP gateway solutions  
-- **Large market**: Every company using AI needs secure MCP deployment
-- **Proven model**: Start open source, monetize enterprise features
+- **Security First**: MCP-aware request validation and response sanitization
+- **Authentication**: API key and JWT-based authentication with role-based access control
+- **Rate Limiting**: Token bucket rate limiting with per-user tiers
+- **Load Balancing**: Intelligent load balancing with health checks and failover
+- **Monitoring**: Prometheus metrics, structured logging, and real-time dashboard
+- **Easy Deployment**: Docker-based deployment with YAML configuration
+- **Web Interface**: Modern admin dashboard for configuration and monitoring
 
-## Core Features
+## Quick Start
 
-### Phase 1: Open Source MVP (Weeks 1-2)
-- [ ] API key authentication & management
-- [ ] Rate limiting (per user/API key)
-- [ ] Request/response logging
-- [ ] Load balancing across MCP server instances
-- [ ] Health checks & circuit breakers
-- [ ] Docker deployment with YAML config
-
-### Phase 2: Production Ready (Weeks 3-4)
-- [ ] JWT token validation
-- [ ] IP whitelisting/blacklisting
-- [ ] Request signing & verification
-- [ ] Prometheus metrics integration
-- [ ] Basic web dashboard
-- [ ] CLI for management
-
-### Phase 3: Enterprise Features (Month 2)
-- [ ] SSO integration (SAML, OIDC)
-- [ ] Advanced RBAC
-- [ ] Audit logging
-- [ ] SLA monitoring
-- [ ] Enterprise dashboard
-- [ ] Managed hosting option
-
-### Phase 4: Platform (Month 3)
-- [ ] Multi-tenant deployment
-- [ ] Auto-scaling
-- [ ] Advanced analytics
-- [ ] Support & SLA tiers
-
-## Tech Stack
-
-- **Core**: Go (performance + enterprise adoption)
-- **Config**: YAML-based configuration
-- **Metrics**: Prometheus + Grafana
-- **Storage**: PostgreSQL (audit logs), Redis (caching)
-- **Deployment**: Docker, Kubernetes ready
-- **Frontend**: Next.js dashboard (when needed)
-
-## Revenue Model
-
-### Open Source (Free)
-- Core gateway functionality
-- Basic authentication & rate limiting
-- Community support
-
-### Enterprise ($500-5000/month)
-- SSO integration
-- Advanced RBAC & audit logging
-- SLA & dedicated support
-- Managed hosting option
-
-## Getting Started
+### Using the Quick Start Script
 
 ```bash
-# Download latest release
-wget https://github.com/plwp/mcprelay/releases/latest/mcprelay
+git clone https://github.com/plwp/mcprelay.git
+cd mcprelay
+./quickstart.sh
+```
 
-# Run with config
-./mcprelay --config config.yaml
+### Manual Installation
 
-# Or with Docker
-docker run -p 8080:8080 -v ./config.yaml:/config.yaml mcprelay/mcprelay
+```bash
+# Install dependencies
+pip install -e .
+
+# Create configuration
+cp config.example.yaml config.yaml
+# Edit config.yaml to add your MCP servers
+
+# Start the gateway
+mcprelay serve
+```
+
+### Docker Deployment
+
+```bash
+# Using Docker Compose (recommended)
+docker-compose up -d
+
+# Or run directly
+docker run -p 8080:8080 -v ./config.yaml:/app/config.yaml mcprelay/mcprelay
+```
+
+## Configuration
+
+MCPRelay uses YAML configuration. Here's a minimal example:
+
+```yaml
+# Basic server settings
+host: "0.0.0.0"
+port: 8080
+
+# MCP servers to proxy to
+servers:
+  - name: "hue-server"
+    url: "http://localhost:3000"
+    weight: 1
+    timeout: 30
+
+# Authentication
+auth:
+  enabled: true
+  method: "api_key"
+  api_keys:
+    admin: "your-admin-key"
+
+# Rate limiting
+rate_limit:
+  enabled: true
+  default_requests_per_minute: 60
+  burst_size: 10
+
+# Security
+mcp_safeguards_enabled: true
 ```
 
 ## Architecture
@@ -88,18 +91,95 @@ AI Client → MCPRelay Gateway → MCP Server(s)
         [Auth, Rate Limit, Load Balance, Monitor]
 ```
 
-MCPRelay sits between your AI clients and MCP servers, providing enterprise-grade security and observability without requiring changes to existing MCP servers.
+MCPRelay sits between your AI clients and MCP servers, providing:
 
-## Project Structure
+- **Request Authentication**: Validates API keys or JWT tokens
+- **Rate Limiting**: Prevents abuse with configurable limits
+- **Load Balancing**: Distributes requests across healthy backend servers
+- **Request Validation**: MCP-aware filtering of dangerous operations
+- **Response Sanitization**: Strips sensitive data from responses
+- **Monitoring**: Comprehensive metrics and logging
 
+## API Endpoints
+
+- `GET /health` - Health check endpoint
+- `GET /metrics` - Prometheus metrics
+- `POST /mcp/{path}` - Main proxy endpoint for MCP requests
+- `GET /admin/` - Web administration interface
+
+## Web Dashboard
+
+MCPRelay includes a modern web interface for administration:
+
+- **Dashboard**: Real-time statistics and recent activity
+- **Server Management**: Add, remove, and monitor backend servers
+- **Configuration**: Edit settings through the web UI
+- **Logs**: View and filter system logs
+- **Metrics**: Performance analytics and visualizations
+
+Access the dashboard at `http://localhost:8080/admin/` (requires admin authentication).
+
+## CLI Usage
+
+```bash
+# Start the server
+mcprelay serve
+
+# Validate configuration
+mcprelay validate
+
+# Check backend health
+mcprelay health
+
+# Show version
+mcprelay version
 ```
-├── cmd/              # CLI application entry points
-├── internal/         # Private application code
-│   ├── gateway/      # Core gateway logic
-│   ├── auth/         # Authentication providers
-│   ├── config/       # Configuration management
-│   └── metrics/      # Observability
-├── pkg/              # Public libraries
-├── deployments/      # Docker, K8s manifests
-└── docs/             # Documentation
-```
+
+## Security
+
+MCPRelay provides multiple layers of security:
+
+### MCP Safeguards
+- Validates JSON-RPC requests for proper MCP format
+- Blocks dangerous operations (file system access, code execution)
+- Sanitizes responses to prevent data leakage
+
+### Authentication
+- API key authentication with configurable keys
+- JWT token validation with proper claims checking
+- Role-based access control (admin vs user permissions)
+
+### Rate Limiting
+- Token bucket algorithm with configurable rates
+- Per-user rate limits
+- Burst capacity for handling traffic spikes
+
+## Monitoring
+
+### Metrics
+MCPRelay exports Prometheus metrics including:
+- Request count and rate
+- Response times and percentiles
+- Backend server health status
+- Error rates and types
+
+### Logging
+Structured JSON logging with configurable levels:
+- Request/response logging
+- Security event logging
+- Performance metrics
+- Error tracking
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/plwp/mcprelay/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/plwp/mcprelay/discussions)
+- **Documentation**: [mcprelay.org](https://mcprelay.org)
