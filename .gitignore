@@ -70,3 +70,16 @@ logs/
 # Temporary folders
 tmp/
 temp/
+
+# License files and keys
+*.pem
+*.key
+*license*.json
+demo_license.json
+test_*license*.json
+*_license.json
+signing_*.pem
+mcprelay_signing_*.pem
+
+# Enterprise test files
+test_license_agnostic.pyc

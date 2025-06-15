@@ -70,6 +70,33 @@ class RedisConfig(BaseModel):
     prefix: str = Field("mcprelay:", description="Key prefix")
 
 
+class PluginConfig(BaseModel):
+    """Plugin system configuration."""
+
+    enabled: bool = Field(True, description="Enable plugin system")
+    enterprise_plugins: bool = Field(True, description="Load enterprise plugins if available")
+    plugin_packages: List[str] = Field(
+        default_factory=lambda: ["mcprelay_enterprise.plugins"], 
+        description="Python packages to search for plugins"
+    )
+    plugin_configs: Dict[str, Dict] = Field(
+        default_factory=dict, description="Per-plugin configuration"
+    )
+
+
+class EnterpriseConfig(BaseModel):
+    """Enterprise license and feature configuration."""
+
+    license_key: Optional[str] = Field(None, description="Enterprise license key")
+    license_file: Optional[str] = Field(None, description="Path to license file")
+    enabled_features: List[str] = Field(
+        default_factory=list, description="Explicitly enabled enterprise features"
+    )
+    disabled_features: List[str] = Field(
+        default_factory=list, description="Explicitly disabled enterprise features"
+    )
+
+
 class MCPRelayConfig(BaseSettings):
     """Main configuration for MCPRelay."""
 
@@ -98,6 +125,8 @@ class MCPRelayConfig(BaseSettings):
     metrics: MetricsConfig = Field(default_factory=lambda: MetricsConfig())
     logging: LoggingConfig = Field(default_factory=lambda: LoggingConfig())
     redis: RedisConfig = Field(default_factory=lambda: RedisConfig())
+    plugins: PluginConfig = Field(default_factory=lambda: PluginConfig())
+    enterprise: EnterpriseConfig = Field(default_factory=lambda: EnterpriseConfig())
 
     # Load balancing
     load_balance_strategy: str = Field(

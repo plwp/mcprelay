@@ -3,7 +3,7 @@ name = "mcprelay"
 version = "0.1.0"
 description = "Enterprise-grade MCP gateway for secure, scalable Model Context Protocol deployments"
 authors = [{name = "PLWP", email = "dev@mcprelay.org"}]
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 readme = "README.md"
 license = {text = "Apache-2.0"}
 keywords = [
@@ -41,6 +41,7 @@ dependencies = [
     "asyncio-mqtt>=0.13.0",
     "jinja2>=3.1.0",
     "python-multipart>=0.0.6",
+    "cryptography>=41.0.0",
 ]
 
 [project.optional-dependencies]

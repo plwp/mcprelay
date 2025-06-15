@@ -1,0 +1,117 @@
+# MCPRelay Test Configuration with Enterprise License
+# This configuration demonstrates enterprise plugin loading
+
+# Server settings
+host: "127.0.0.1"
+port: 8080
+workers: 1
+debug_mode: true
+
+# CORS settings
+allowed_origins:
+  - "http://localhost:3000"
+  - "http://127.0.0.1:3000"
+
+# Test MCP backend servers
+servers:
+  - name: "test-server"
+    url: "http://httpbin.org"
+    weight: 1
+    timeout: 30
+    tags: ["test", "demo"]
+
+# Load balancing
+load_balance_strategy: "round_robin"
+health_check_interval: 30
+
+# Authentication
+auth:
+  enabled: true
+  method: "api_key"
+  api_keys:
+    admin: "test-admin-key-123"
+    user: "test-user-key-456"
+
+# Rate limiting
+rate_limit:
+  enabled: true
+  default_requests_per_minute: 60
+  burst_size: 10
+
+# Security settings
+mcp_safeguards_enabled: true
+
+# Enterprise license configuration
+enterprise:
+  license_key: "MCPRELAY-ENT-D73FFFE1E31B10E2"  # Demo enterprise license
+  enabled_features: []
+  disabled_features: []
+
+# Plugin system configuration
+plugins:
+  enabled: true
+  enterprise_plugins: true
+  plugin_packages:
+    - "mcprelay_enterprise.plugins"
+  plugin_configs:
+    # Test plugin config
+    test_plugin:
+      test_data:
+        demo: true
+        enterprise_mode: true
+        features: ["saml", "monitoring", "vault"]
+    
+    # SAML authentication config
+    saml_auth:
+      idp_metadata_url: "https://dev-example.okta.com/app/metadata"
+      sp_entity_id: "mcprelay-test"
+      sp_acs_url: "http://localhost:8080/auth/saml/acs"
+      sp_sls_url: "http://localhost:8080/auth/saml/sls"
+      attribute_mapping:
+        user_id: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        email: "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+        groups: "http://schemas.microsoft.com/ws/2008/06/identity/claims/groups"
+    
+    # OIDC authentication config
+    oidc_auth:
+      client_id: "test-client-id"
+      client_secret: "test-client-secret"
+      discovery_url: "https://accounts.google.com/.well-known/openid_configuration"
+      redirect_uri: "http://localhost:8080/auth/oidc/callback"
+      scopes: ["openid", "profile", "email"]
+      admin_groups: ["mcprelay-admins"]
+    
+    # LDAP authentication config
+    ldap_auth:
+      server: "ldap://test-ad.company.com"
+      bind_dn: "CN=service-account,OU=Service Accounts,DC=company,DC=com"
+      bind_password: "test-password"
+      user_search_base: "OU=Users,DC=company,DC=com"
+      user_search_filter: "(sAMAccountName={username})"
+      group_search_base: "OU=Groups,DC=company,DC=com"
+      group_search_filter: "(member={user_dn})"
+      admin_groups: ["Domain Admins", "MCPRelay Administrators"]
+      use_tls: true
+    
+    # Vault secrets config
+    vault_secrets:
+      vault_url: "https://vault.company.com"
+      auth_method: "token"
+      token: "test-vault-token"
+
+# Redis (disabled for testing)
+redis:
+  enabled: false
+
+# Metrics and monitoring
+metrics:
+  enabled: true
+  port: 9090
+  path: "/metrics"
+
+# Logging configuration
+logging:
+  level: "DEBUG"
+  format: "json"
+  access_log: true
+  audit_log: true

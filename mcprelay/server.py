@@ -17,8 +17,10 @@ from prometheus_client import (
 
 from .auth import AuthContext, get_current_user, init_auth_manager
 from .config import MCPRelayConfig
+from .license import init_license_manager, get_license_manager
 from .load_balancer import LoadBalancer
 from .mcp import MCPRequestValidator, MCPResponseSanitizer
+from .plugins import init_plugin_manager, get_plugin_manager
 from .rate_limit import init_rate_limiter, rate_limit_check
 from .web_ui import router as web_ui_router
 
@@ -55,6 +57,10 @@ class MCPRelay:
             ACTIVE_CONNECTIONS.inc()
 
             try:
+                # Execute pre-request hooks
+                plugin_manager = get_plugin_manager()
+                if plugin_manager:
+                    await plugin_manager.execute_hook("pre_request", request, auth_context)
                 # Get target server
                 target_server = await self.load_balancer.get_server(
                     user_id=auth_context.user_id, path=path
@@ -123,15 +129,21 @@ class MCPRelay:
                     method=request.method, endpoint=path, status=response.status_code
                 ).inc()
 
-                # Return response
+                # Create response
                 response_headers = dict(response.headers)
                 response_headers["X-MCPRelay-Backend"] = target_server.name
 
-                return Response(
+                final_response = Response(
                     content=sanitized_content,
                     status_code=response.status_code,
                     headers=response_headers,
                 )
+
+                # Execute post-response hooks
+                if plugin_manager:
+                    await plugin_manager.execute_hook("post_response", final_response, auth_context)
+
+                return final_response
 
             except httpx.RequestError as e:
                 logger.error("Backend request failed", error=str(e))
@@ -175,6 +187,23 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
     async def startup():
         """Application startup."""
         logger.info("MCPRelay starting up", config=config.model_dump())
+        
+        # Initialize license manager
+        license_manager = init_license_manager(
+            config.enterprise.license_key,
+            config.enterprise.license_file
+        )
+        
+        # Initialize plugin manager
+        plugin_manager = init_plugin_manager(license_manager)
+        
+        # Load plugins if enabled
+        if config.plugins.enabled:
+            await plugin_manager.discover_and_load_plugins(config.plugins.plugin_packages)
+        
+        # Execute startup hooks
+        await plugin_manager.execute_hook("server_startup", config)
+        
         init_auth_manager(config)
         init_rate_limiter(config)
         await relay.load_balancer.start_health_checks()
@@ -183,6 +212,13 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
     async def shutdown():
         """Application shutdown."""
         logger.info("MCPRelay shutting down")
+        
+        # Execute shutdown hooks
+        plugin_manager = get_plugin_manager()
+        if plugin_manager:
+            await plugin_manager.execute_hook("server_shutdown")
+            await plugin_manager.shutdown_all_plugins()
+        
         await relay.client.aclose()
         await relay.load_balancer.stop_health_checks()
 
@@ -242,7 +278,51 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
             safe_config["auth"]["api_keys"] = {
                 k: "***" for k in safe_config["auth"]["api_keys"]
             }
+        if "enterprise" in safe_config and "license_key" in safe_config["enterprise"]:
+            safe_config["enterprise"]["license_key"] = "***" if safe_config["enterprise"]["license_key"] else None
 
         return safe_config
+
+    # License information endpoint (admin only)
+    @app.get("/admin/license")
+    async def get_license_info(auth_context: AuthContext = Depends(get_current_user)):
+        """Get license information (admin only)."""
+        if not auth_context.is_admin:
+            raise HTTPException(status_code=403, detail="Admin access required")
+
+        license_manager = get_license_manager()
+        if not license_manager:
+            return {"status": "no_license_manager"}
+
+        return {
+            "license_info": license_manager.get_license_info(),
+            "feature_status": license_manager.get_feature_status(),
+        }
+
+    # Plugin status endpoint (admin only)
+    @app.get("/admin/plugins")
+    async def get_plugin_status(auth_context: AuthContext = Depends(get_current_user)):
+        """Get plugin status (admin only)."""
+        if not auth_context.is_admin:
+            raise HTTPException(status_code=403, detail="Admin access required")
+
+        plugin_manager = get_plugin_manager()
+        if not plugin_manager:
+            return {"status": "no_plugin_manager"}
+
+        plugins = plugin_manager.get_enabled_plugins()
+        return {
+            "enabled": len(plugins) > 0,
+            "plugin_count": len(plugins),
+            "plugins": [
+                {
+                    "name": p.name,
+                    "enabled": p.enabled,
+                    "required_features": p.get_required_features(),
+                }
+                for p in plugins
+            ],
+            "available_hooks": list(plugin_manager.hooks.keys()),
+        }
 
     return app

@@ -135,9 +135,21 @@ async def get_current_user(
     if not auth_manager:
         raise HTTPException(status_code=500, detail="Auth not initialized")
 
+    # Execute pre-auth hooks
+    from .plugins import get_plugin_manager
+    plugin_manager = get_plugin_manager()
+    if plugin_manager:
+        await plugin_manager.execute_hook("pre_auth", request)
+
     if not auth_manager.config.auth.enabled:
         # Auth disabled - return default context
-        return AuthContext(user_id="anonymous", request_id=str(uuid.uuid4()))
+        auth_context = AuthContext(user_id="anonymous", request_id=str(uuid.uuid4()))
+        
+        # Execute post-auth hooks
+        if plugin_manager:
+            await plugin_manager.execute_hook("post_auth", auth_context)
+        
+        return auth_context
 
     # Try different auth methods
     auth_context = None
@@ -186,6 +198,10 @@ async def get_current_user(
         request_id=auth_context.request_id,
         ip=request.client.host if request.client else "unknown",
     )
+
+    # Execute post-auth hooks
+    if plugin_manager:
+        await plugin_manager.execute_hook("post_auth", auth_context)
 
     return auth_context
 

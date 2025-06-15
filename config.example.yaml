@@ -73,3 +73,24 @@ logging:
   format: "json"  # json, text
   access_log: true
   audit_log: true
+
+# Enterprise license and features
+enterprise:
+  license_key: null  # Set to your enterprise license key
+  license_file: null  # Or path to license file
+  enabled_features: []  # Explicitly enable features
+  disabled_features: []  # Explicitly disable features
+
+# Plugin system
+plugins:
+  enabled: true
+  enterprise_plugins: true  # Load enterprise plugins if license allows
+  plugin_packages:
+    - "mcprelay_enterprise.plugins"  # Enterprise plugin package
+  plugin_configs:
+    # Per-plugin configuration
+    # saml_auth:
+    #   idp_url: "https://your-idp.com/saml"
+    #   sp_entity_id: "mcprelay"
+    # advanced_monitoring:
+    #   grafana_url: "http://grafana:3000"
