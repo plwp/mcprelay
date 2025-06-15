@@ -53,6 +53,8 @@ dev = [
     "ruff>=0.1.0",
     "mypy>=1.7.0",
     "pre-commit>=3.5.0",
+    "httpx>=0.25.0",
+    "fastapi[all]>=0.104.0",
 ]
 enterprise = [
     "authlib>=1.2.0",
@@ -96,6 +98,4 @@ python_functions = ["test_*"]
 addopts = [
     "--strict-markers",
     "--strict-config",
-    "--cov=mcprelay",
-    "--cov-report=term-missing",
 ]
