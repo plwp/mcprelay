@@ -13,7 +13,51 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-4">
-                    <i class="fas fa-shield-alt text-2xl"></i>
+                    <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="apiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="relayGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                            </linearGradient>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                                <feMerge> 
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <g transform="translate(8, 20) scale(0.8)">
+                            <circle cx="0" cy="-15" r="4" fill="url(#aiGradient)" opacity="0.8"/>
+                            <circle cx="0" cy="0" r="4" fill="url(#aiGradient)"/>
+                            <circle cx="0" cy="15" r="4" fill="url(#aiGradient)" opacity="0.8"/>
+                            <line x1="4" y1="-15" x2="12" y2="-8" stroke="url(#aiGradient)" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="4" y1="0" x2="12" y2="-8" stroke="url(#aiGradient)" stroke-width="2"/>
+                            <line x1="4" y1="0" x2="12" y2="8" stroke="url(#aiGradient)" stroke-width="2"/>
+                            <line x1="4" y1="15" x2="12" y2="8" stroke="url(#aiGradient)" stroke-width="1.5" opacity="0.6"/>
+                        </g>
+                        <g transform="translate(20, 20) scale(0.8)">
+                            <circle cx="0" cy="0" r="12" fill="none" stroke="url(#relayGradient)" stroke-width="2" opacity="0.4"/>
+                            <circle cx="0" cy="0" r="6" fill="url(#relayGradient)" filter="url(#glow)"/>
+                        </g>
+                        <g transform="translate(32, 20) scale(0.8)">
+                            <rect x="-4" y="-15" width="8" height="8" rx="1" fill="url(#apiGradient)" opacity="0.8"/>
+                            <rect x="-4" y="-4" width="8" height="8" rx="1" fill="url(#apiGradient)"/>
+                            <rect x="-4" y="7" width="8" height="8" rx="1" fill="url(#apiGradient)" opacity="0.8"/>
+                            <line x1="-12" y1="-8" x2="-4" y2="-11" stroke="url(#apiGradient)" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="-12" y1="-8" x2="-4" y2="0" stroke="url(#apiGradient)" stroke-width="2"/>
+                            <line x1="-12" y1="8" x2="-4" y2="0" stroke="url(#apiGradient)" stroke-width="2"/>
+                            <line x1="-12" y1="8" x2="-4" y2="11" stroke="url(#apiGradient)" stroke-width="1.5" opacity="0.6"/>
+                        </g>
+                    </svg>
                     <h1 class="text-xl font-bold">MCPRelay</h1>
                 </div>
                 <div class="flex items-center space-x-6">
@@ -192,7 +236,44 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
                     <div class="flex items-center space-x-2 mb-4">
-                        <i class="fas fa-shield-alt text-2xl"></i>
+                        <svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="aiGradientFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="apiGradientFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="relayGradientFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <g transform="translate(20, 50) scale(0.6)">
+                                <circle cx="0" cy="-15" r="4" fill="url(#aiGradientFooter)" opacity="0.8"/>
+                                <circle cx="0" cy="0" r="4" fill="url(#aiGradientFooter)"/>
+                                <circle cx="0" cy="15" r="4" fill="url(#aiGradientFooter)" opacity="0.8"/>
+                                <line x1="4" y1="-15" x2="12" y2="-8" stroke="url(#aiGradientFooter)" stroke-width="1.5" opacity="0.6"/>
+                                <line x1="4" y1="0" x2="12" y2="-8" stroke="url(#aiGradientFooter)" stroke-width="2"/>
+                                <line x1="4" y1="0" x2="12" y2="8" stroke="url(#aiGradientFooter)" stroke-width="2"/>
+                                <line x1="4" y1="15" x2="12" y2="8" stroke="url(#aiGradientFooter)" stroke-width="1.5" opacity="0.6"/>
+                            </g>
+                            <g transform="translate(50, 50) scale(0.6)">
+                                <circle cx="0" cy="0" r="12" fill="none" stroke="url(#relayGradientFooter)" stroke-width="2" opacity="0.4"/>
+                                <circle cx="0" cy="0" r="6" fill="url(#relayGradientFooter)"/>
+                            </g>
+                            <g transform="translate(80, 50) scale(0.6)">
+                                <rect x="-4" y="-15" width="8" height="8" rx="1" fill="url(#apiGradientFooter)" opacity="0.8"/>
+                                <rect x="-4" y="-4" width="8" height="8" rx="1" fill="url(#apiGradientFooter)"/>
+                                <rect x="-4" y="7" width="8" height="8" rx="1" fill="url(#apiGradientFooter)" opacity="0.8"/>
+                                <line x1="-12" y1="-8" x2="-4" y2="-11" stroke="url(#apiGradientFooter)" stroke-width="1.5" opacity="0.6"/>
+                                <line x1="-12" y1="-8" x2="-4" y2="0" stroke="url(#apiGradientFooter)" stroke-width="2"/>
+                                <line x1="-12" y1="8" x2="-4" y2="0" stroke="url(#apiGradientFooter)" stroke-width="2"/>
+                                <line x1="-12" y1="8" x2="-4" y2="11" stroke="url(#apiGradientFooter)" stroke-width="1.5" opacity="0.6"/>
+                            </g>
+                        </svg>
                         <h3 class="text-xl font-bold">MCPRelay</h3>
                     </div>
                     <p class="text-gray-400">

@@ -2,6 +2,7 @@
 
 import click
 import uvicorn
+import os
 from pathlib import Path
 from .config import MCPRelayConfig
 from .server import create_app
@@ -48,11 +49,19 @@ def serve(config: Path, host: str, port: int, reload: bool):
         click.echo(f"Configuration file {config} not found, using defaults")
         cfg = MCPRelayConfig()
     
-    # Override with CLI options
+    # Override with CLI options and environment variables
     if host:
         cfg.host = host
     if port:
         cfg.port = port
+    
+    # Cloud Run sets PORT environment variable
+    if os.getenv('PORT'):
+        cfg.port = int(os.getenv('PORT'))
+    
+    # Ensure we bind to all interfaces in containerized environments
+    if os.getenv('ENVIRONMENT') == 'production':
+        cfg.host = '0.0.0.0'
     
     # Create FastAPI app
     app = create_app(cfg)
