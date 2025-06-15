@@ -2,6 +2,7 @@
 
 import pytest
 from fastapi.testclient import TestClient
+
 from mcprelay.config import MCPRelayConfig
 from mcprelay.server import create_app
 

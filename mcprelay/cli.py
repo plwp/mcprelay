@@ -1,9 +1,11 @@
 """Command-line interface for MCPRelay."""
 
-import click
-import uvicorn
 import os
 from pathlib import Path
+
+import click
+import uvicorn
+
 from .config import MCPRelayConfig
 from .server import create_app
 
@@ -17,55 +19,42 @@ def cli():
 
 @cli.command()
 @click.option(
-    "--config", 
-    "-c", 
+    "--config",
+    "-c",
     type=click.Path(exists=True, path_type=Path),
     default="config.yaml",
-    help="Configuration file path"
+    help="Configuration file path",
 )
-@click.option(
-    "--host",
-    default=None,
-    help="Server host (overrides config)"
-)
-@click.option(
-    "--port", 
-    type=int,
-    default=None,
-    help="Server port (overrides config)"
-)
-@click.option(
-    "--reload",
-    is_flag=True,
-    help="Enable auto-reload for development"
-)
+@click.option("--host", default=None, help="Server host (overrides config)")
+@click.option("--port", type=int, default=None, help="Server port (overrides config)")
+@click.option("--reload", is_flag=True, help="Enable auto-reload for development")
 def serve(config: Path, host: str, port: int, reload: bool):
     """Start the MCPRelay server."""
-    
+
     # Load configuration
     if config.exists():
         cfg = MCPRelayConfig.from_yaml(str(config))
     else:
         click.echo(f"Configuration file {config} not found, using defaults")
         cfg = MCPRelayConfig()
-    
+
     # Override with CLI options and environment variables
     if host:
         cfg.host = host
     if port:
         cfg.port = port
-    
+
     # Cloud Run sets PORT environment variable
-    if os.getenv('PORT'):
-        cfg.port = int(os.getenv('PORT'))
-    
+    if os.getenv("PORT"):
+        cfg.port = int(os.getenv("PORT"))
+
     # Ensure we bind to all interfaces in containerized environments
-    if os.getenv('ENVIRONMENT') == 'production':
-        cfg.host = '0.0.0.0'
-    
+    if os.getenv("ENVIRONMENT") == "production":
+        cfg.host = "0.0.0.0"
+
     # Create FastAPI app
     app = create_app(cfg)
-    
+
     # Start server
     click.echo(f"Starting MCPRelay on {cfg.host}:{cfg.port}")
     if cfg.servers:
@@ -74,13 +63,13 @@ def serve(config: Path, host: str, port: int, reload: bool):
             click.echo(f"  - {server.name}: {server.url}")
     else:
         click.echo("Warning: No MCP servers configured")
-    
+
     uvicorn.run(
         app,
         host=cfg.host,
         port=cfg.port,
         reload=reload,
-        access_log=cfg.logging.access_log
+        access_log=cfg.logging.access_log,
     )
 
 
@@ -90,18 +79,20 @@ def serve(config: Path, host: str, port: int, reload: bool):
     "-o",
     type=click.Path(path_type=Path),
     default="config.yaml",
-    help="Output configuration file"
+    help="Output configuration file",
 )
 def init(output: Path):
     """Initialize a new configuration file."""
-    
+
     if output.exists():
-        click.confirm(f"Configuration file {output} already exists. Overwrite?", abort=True)
-    
+        click.confirm(
+            f"Configuration file {output} already exists. Overwrite?", abort=True
+        )
+
     # Create default config
     cfg = MCPRelayConfig()
     cfg.to_yaml(str(output))
-    
+
     click.echo(f"Created configuration file: {output}")
     click.echo("Edit the file to add your MCP servers and customize settings.")
 
@@ -109,20 +100,24 @@ def init(output: Path):
 @cli.command()
 @click.option(
     "--config",
-    "-c", 
+    "-c",
     type=click.Path(exists=True, path_type=Path),
     default="config.yaml",
-    help="Configuration file to validate"
+    help="Configuration file to validate",
 )
 def validate(config: Path):
     """Validate configuration file."""
-    
+
     try:
         cfg = MCPRelayConfig.from_yaml(str(config))
         click.echo(f"✓ Configuration file {config} is valid")
         click.echo(f"  - {len(cfg.servers)} MCP servers configured")
-        click.echo(f"  - Authentication: {'enabled' if cfg.auth.enabled else 'disabled'}")
-        click.echo(f"  - Rate limiting: {'enabled' if cfg.rate_limit.enabled else 'disabled'}")
+        click.echo(
+            f"  - Authentication: {'enabled' if cfg.auth.enabled else 'disabled'}"
+        )
+        click.echo(
+            f"  - Rate limiting: {'enabled' if cfg.rate_limit.enabled else 'disabled'}"
+        )
         click.echo(f"  - Metrics: {'enabled' if cfg.metrics.enabled else 'disabled'}")
     except Exception as e:
         click.echo(f"✗ Configuration file {config} is invalid: {e}", err=True)
@@ -133,44 +128,46 @@ def validate(config: Path):
 @click.option(
     "--config",
     "-c",
-    type=click.Path(exists=True, path_type=Path), 
+    type=click.Path(exists=True, path_type=Path),
     default="config.yaml",
-    help="Configuration file"
+    help="Configuration file",
 )
 def health(config: Path):
     """Check health of configured MCP servers."""
-    
+
     import asyncio
+
     import httpx
-    
+
     async def check_server_health(server):
         """Check health of a single server."""
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(
-                    f"{server.url}{server.health_check_path}",
-                    timeout=server.timeout
+                    f"{server.url}{server.health_check_path}", timeout=server.timeout
                 )
                 if response.status_code == 200:
                     return f"✓ {server.name} ({server.url}) - OK"
                 else:
-                    return f"✗ {server.name} ({server.url}) - HTTP {response.status_code}"
+                    return (
+                        f"✗ {server.name} ({server.url}) - HTTP {response.status_code}"
+                    )
         except Exception as e:
             return f"✗ {server.name} ({server.url}) - {str(e)}"
-    
+
     async def check_all():
         cfg = MCPRelayConfig.from_yaml(str(config))
         if not cfg.servers:
             click.echo("No MCP servers configured")
             return
-        
+
         click.echo("Checking MCP server health...")
         tasks = [check_server_health(server) for server in cfg.servers]
         results = await asyncio.gather(*tasks)
-        
+
         for result in results:
             click.echo(result)
-    
+
     asyncio.run(check_all())
 
 

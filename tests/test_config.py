@@ -1,6 +1,5 @@
 """Test configuration management."""
 
-import pytest
 from mcprelay.config import MCPRelayConfig, MCPServerConfig
 
 
@@ -15,10 +14,7 @@ def test_default_config():
 
 def test_server_config():
     """Test MCP server configuration."""
-    server = MCPServerConfig(
-        name="test-server",
-        url="http://localhost:3000"
-    )
+    server = MCPServerConfig(name="test-server", url="http://localhost:3000")
     assert server.name == "test-server"
     assert server.url == "http://localhost:3000"
     assert server.timeout == 30
@@ -30,12 +26,7 @@ def test_config_from_dict():
     config_dict = {
         "host": "127.0.0.1",
         "port": 9000,
-        "servers": [
-            {
-                "name": "test",
-                "url": "http://test.com"
-            }
-        ]
+        "servers": [{"name": "test", "url": "http://test.com"}],
     }
     config = MCPRelayConfig(**config_dict)
     assert config.host == "127.0.0.1"
