@@ -94,55 +94,7 @@
                 <div class="relative">
                     <!-- Background circle for better contrast -->
                     <div class="absolute inset-0 bg-white/10 rounded-full w-32 h-32 blur-sm"></div>
-                    <svg width="128" height="128" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="relative z-10">
-                        <defs>
-                            <linearGradient id="aiGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#A78BFA;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
-                            </linearGradient>
-                            <linearGradient id="apiGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
-                            </linearGradient>
-                            <linearGradient id="relayGradientHero" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#34D399;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" />
-                            </linearGradient>
-                            <filter id="glowHero">
-                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                <feMerge> 
-                                    <feMergeNode in="coloredBlur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                        </defs>
-                        <!-- AI side -->
-                        <g transform="translate(15, 50) scale(1.3)" class="animate-pulse-flow">
-                            <circle cx="0" cy="-15" r="4" fill="url(#aiGradientHero)" opacity="0.9"/>
-                            <circle cx="0" cy="0" r="4" fill="url(#aiGradientHero)"/>
-                            <circle cx="0" cy="15" r="4" fill="url(#aiGradientHero)" opacity="0.9"/>
-                            <line x1="4" y1="-15" x2="12" y2="-8" stroke="url(#aiGradientHero)" stroke-width="2" opacity="0.8" class="animate-pulse-flow"/>
-                            <line x1="4" y1="0" x2="12" y2="-8" stroke="url(#aiGradientHero)" stroke-width="2.5"/>
-                            <line x1="4" y1="0" x2="12" y2="8" stroke="url(#aiGradientHero)" stroke-width="2.5"/>
-                            <line x1="4" y1="15" x2="12" y2="8" stroke="url(#aiGradientHero)" stroke-width="2" opacity="0.8" class="animate-pulse-flow"/>
-                        </g>
-                        <!-- Relay center (with rotation) -->
-                        <g transform="translate(50, 50) scale(1.3)" class="animate-rotate-slow">
-                            <circle cx="0" cy="0" r="12" fill="none" stroke="url(#relayGradientHero)" stroke-width="2.5" opacity="0.6"/>
-                            <circle cx="0" cy="0" r="7" fill="url(#relayGradientHero)" filter="url(#glowHero)"/>
-                            <circle cx="0" cy="0" r="3" fill="white" opacity="0.9"/>
-                        </g>
-                        <!-- API side -->
-                        <g transform="translate(85, 50) scale(1.3)" class="animate-pulse-flow">
-                            <rect x="-4" y="-15" width="8" height="8" rx="1.5" fill="url(#apiGradientHero)" opacity="0.9"/>
-                            <rect x="-4" y="-4" width="8" height="8" rx="1.5" fill="url(#apiGradientHero)"/>
-                            <rect x="-4" y="7" width="8" height="8" rx="1.5" fill="url(#apiGradientHero)" opacity="0.9"/>
-                            <line x1="-12" y1="-8" x2="-4" y2="-11" stroke="url(#apiGradientHero)" stroke-width="2" opacity="0.8" class="animate-pulse-flow"/>
-                            <line x1="-12" y1="-8" x2="-4" y2="0" stroke="url(#apiGradientHero)" stroke-width="2.5"/>
-                            <line x1="-12" y1="8" x2="-4" y2="0" stroke="url(#apiGradientHero)" stroke-width="2.5"/>
-                            <line x1="-12" y1="8" x2="-4" y2="11" stroke="url(#apiGradientHero)" stroke-width="2" opacity="0.8" class="animate-pulse-flow"/>
-                        </g>
-                    </svg>
+                    <img src="../assets/logo-hero.svg" alt="MCPRelay Logo" width="128" height="128" class="relative z-10">
                 </div>
             </div>
             <h1 class="text-6xl font-bold mb-6 tracking-tight">
