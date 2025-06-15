@@ -1,0 +1,55 @@
+# Production configuration for MCPRelay on GCP
+host: "0.0.0.0"
+port: 8080
+workers: 1
+debug_mode: false
+
+# CORS settings - restrict in production
+allowed_origins:
+  - "https://mcprelay.org"
+  - "https://www.mcprelay.org"
+
+# No backend servers by default - users will configure their own
+servers: []
+
+# Load balancing
+load_balance_strategy: "round_robin"
+health_check_interval: 30
+
+# Authentication - will be configured via environment variables
+auth:
+  enabled: true
+  method: "api_key"
+  jwt_algorithm: "HS256"
+  jwt_secret: null  # Set via environment variable
+  api_keys: {}      # Set via environment variable
+
+# Rate limiting
+rate_limit:
+  enabled: true
+  default_requests_per_minute: 60
+  burst_size: 10
+  per_user_limits: {}
+
+# Security
+mcp_safeguards_enabled: true
+
+# Redis - can be enabled with Cloud Memorystore
+redis:
+  enabled: false
+  url: null  # Set via environment variable if needed
+  db: 0
+  prefix: "mcprelay:"
+
+# Metrics
+metrics:
+  enabled: true
+  port: 9090
+  path: "/metrics"
+
+# Logging - structured JSON for Cloud Logging
+logging:
+  level: "INFO"
+  format: "json"
+  access_log: true
+  audit_log: true

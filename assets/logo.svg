@@ -1,0 +1,82 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="aiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A855F7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="apiGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="relayGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- AI side - neural network pattern -->
+  <g transform="translate(20, 50)">
+    <!-- Neural nodes -->
+    <circle cx="0" cy="-15" r="4" fill="url(#aiGradient)" opacity="0.8"/>
+    <circle cx="0" cy="0" r="4" fill="url(#aiGradient)"/>
+    <circle cx="0" cy="15" r="4" fill="url(#aiGradient)" opacity="0.8"/>
+    
+    <!-- Neural connections -->
+    <line x1="4" y1="-15" x2="12" y2="-8" stroke="url(#aiGradient)" stroke-width="1.5" opacity="0.6"/>
+    <line x1="4" y1="0" x2="12" y2="-8" stroke="url(#aiGradient)" stroke-width="2"/>
+    <line x1="4" y1="0" x2="12" y2="8" stroke="url(#aiGradient)" stroke-width="2"/>
+    <line x1="4" y1="15" x2="12" y2="8" stroke="url(#aiGradient)" stroke-width="1.5" opacity="0.6"/>
+  </g>
+  
+  <!-- Central relay hub -->
+  <g transform="translate(50, 50)">
+    <!-- Outer ring -->
+    <circle cx="0" cy="0" r="12" fill="none" stroke="url(#relayGradient)" stroke-width="2" opacity="0.4"/>
+    
+    <!-- Inner core -->
+    <circle cx="0" cy="0" r="6" fill="url(#relayGradient)" filter="url(#glow)"/>
+    
+    <!-- Data flow particles -->
+    <circle cx="-8" cy="0" r="1.5" fill="url(#relayGradient)" opacity="0.8">
+      <animateTransform attributeName="transform" type="rotate" values="0 0 0;360 0 0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="8" cy="0" r="1.5" fill="url(#relayGradient)" opacity="0.8">
+      <animateTransform attributeName="transform" type="rotate" values="180 0 0;540 0 0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="-8" r="1.5" fill="url(#relayGradient)" opacity="0.6">
+      <animateTransform attributeName="transform" type="rotate" values="90 0 0;450 0 0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="8" r="1.5" fill="url(#relayGradient)" opacity="0.6">
+      <animateTransform attributeName="transform" type="rotate" values="270 0 0;630 0 0" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- API side - geometric/structured pattern -->
+  <g transform="translate(80, 50)">
+    <!-- API endpoints -->
+    <rect x="-4" y="-15" width="8" height="8" rx="1" fill="url(#apiGradient)" opacity="0.8"/>
+    <rect x="-4" y="-4" width="8" height="8" rx="1" fill="url(#apiGradient)"/>
+    <rect x="-4" y="7" width="8" height="8" rx="1" fill="url(#apiGradient)" opacity="0.8"/>
+    
+    <!-- API connections -->
+    <line x1="-12" y1="-8" x2="-4" y2="-11" stroke="url(#apiGradient)" stroke-width="1.5" opacity="0.6"/>
+    <line x1="-12" y1="-8" x2="-4" y2="0" stroke="url(#apiGradient)" stroke-width="2"/>
+    <line x1="-12" y1="8" x2="-4" y2="0" stroke="url(#apiGradient)" stroke-width="2"/>
+    <line x1="-12" y1="8" x2="-4" y2="11" stroke="url(#apiGradient)" stroke-width="1.5" opacity="0.6"/>
+  </g>
+  
+  <!-- Connection flow lines -->
+  <path d="M 32 42 Q 50 35 68 42" fill="none" stroke="url(#relayGradient)" stroke-width="2" opacity="0.7" stroke-dasharray="4,2">
+    <animate attributeName="stroke-dashoffset" values="0;6" dur="1s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 32 58 Q 50 65 68 58" fill="none" stroke="url(#relayGradient)" stroke-width="2" opacity="0.7" stroke-dasharray="4,2">
+    <animate attributeName="stroke-dashoffset" values="6;0" dur="1s" repeatCount="indefinite"/>
+  </path>
+</svg>
