@@ -93,7 +93,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Download package artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v6
       with:
         name: dist
         path: dist/
@@ -110,7 +110,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Download package artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v6
       with:
         name: dist
         path: dist/
