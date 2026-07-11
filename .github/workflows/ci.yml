@@ -68,7 +68,10 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         file: ./coverage.xml
-        fail_ci_if_error: true
+        # A coverage-upload failure (e.g. Codecov 429 rate-limit or a missing
+        # token on a fork) must not red an otherwise-green build — the tests
+        # have already passed by this point. Coverage reporting is advisory.
+        fail_ci_if_error: false
 
   docker:
     runs-on: ubuntu-latest
