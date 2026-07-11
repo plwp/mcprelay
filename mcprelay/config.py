@@ -29,6 +29,16 @@ class AuthConfig(BaseModel):
     api_keys: Dict[str, str] = Field(
         default_factory=dict, description="API key to user mapping"
     )
+    admin_users: List[str] = Field(
+        default_factory=list,
+        description=(
+            "Explicit allowlist of user IDs granted admin privileges. This is "
+            "the source of truth for admin access on the API-key auth path. The "
+            "legacy '-admin' username-suffix convention is still honoured for "
+            "backward compatibility but is fragile (e.g. a user named "
+            "'not-admin' matches it) and should not be relied on for new setups."
+        ),
+    )
 
 
 class RateLimitConfig(BaseModel):
