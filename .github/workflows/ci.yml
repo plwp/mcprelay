@@ -88,6 +88,12 @@ jobs:
       with:
         context: .
         push: false
+        # Load the built image into the local docker daemon so the next step
+        # can `docker run mcprelay:test`. Without this the docker-container
+        # buildx driver leaves the result in the build cache only ("No output
+        # specified with docker-container driver") and the run step 125s with
+        # "Unable to find image 'mcprelay:test' locally".
+        load: true
         tags: mcprelay:test
         cache-from: type=gha
         cache-to: type=gha,mode=max
