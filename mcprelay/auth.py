@@ -39,20 +39,31 @@ class AuthManager:
 
     def _build_api_key_cache(self):
         """Build API key lookup cache."""
+        self._admin_users = set(self.config.auth.admin_users)
         for api_key, user_id in self.config.auth.api_keys.items():
             # Hash API key for security
             key_hash = hashlib.sha256(api_key.encode()).hexdigest()
             self.api_key_cache[key_hash] = {
                 "user_id": user_id,
-                "is_admin": user_id.endswith("-admin"),
+                "is_admin": self._is_admin_user(user_id),
                 "rate_limit_tier": self._get_user_rate_tier(user_id),
             }
+
+    def _is_admin_user(self, user_id: str) -> bool:
+        """Decide whether a user_id has admin privileges.
+
+        The explicit ``auth.admin_users`` allowlist is the source of truth. The
+        legacy ``-admin`` username-suffix convention is still honoured for
+        backward compatibility, but it is fragile (``"not-admin"`` matches it),
+        so the allowlist should be preferred for new configurations.
+        """
+        return user_id in self._admin_users or user_id.endswith("-admin")
 
     def _get_user_rate_tier(self, user_id: str) -> str:
         """Get rate limit tier for user."""
         if user_id in self.config.rate_limit.per_user_limits:
             return "custom"
-        elif user_id.endswith("-admin"):
+        elif self._is_admin_user(user_id):
             return "admin"
         return "default"
 
