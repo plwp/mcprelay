@@ -3,6 +3,7 @@ MCP protocol awareness and safeguards.
 """
 
 import json
+import posixpath
 from typing import Any, Dict, Optional
 
 import structlog
@@ -163,15 +164,13 @@ class MCPRequestValidator:
         sanitized = params.copy()
 
         if method == "files/write":
-            # Validate file path
-            file_path = params.get("path", "")
-            if self._contains_dangerous_patterns(file_path):
-                raise ValueError(f"Dangerous file path: {file_path}")
-
-            # Restrict to user's directory if not admin
-            if not auth_context.is_admin:
-                if not file_path.startswith(f"/users/{auth_context.user_id}/"):
-                    raise ValueError("File access restricted to user directory")
+            # Resolve the path by NORMALISATION, not a substring denylist: an
+            # encoded ("..%2f") or creative traversal slips past `"../" in path`
+            # and would reach the upstream file server. The normalised path is
+            # what we forward.
+            sanitized["path"] = self._safe_file_path(
+                params.get("path", ""), auth_context
+            )
 
         elif method == "tools/call":
             # Validate tool name and arguments
@@ -181,6 +180,32 @@ class MCPRequestValidator:
                     raise ValueError("System tools require admin privileges")
 
         return sanitized
+
+    def _safe_file_path(self, file_path: str, auth_context: AuthContext) -> str:
+        """Resolve a ``files/*`` path safely, defeating traversal by NORMALISATION.
+
+        A substring denylist (``"../" in path``) is not enough — encoded
+        (``..%2f``) or creative paths slip through and reach the upstream file
+        server. So we reject URL-encoding / NUL bytes outright (``normpath``
+        can't see through them), collapse any ``..`` segments, require an
+        absolute path, and — for non-admins — verify the *normalised* path is
+        contained within the caller's own directory. Returns the normalised
+        path, which is what gets forwarded upstream.
+        """
+        if not isinstance(file_path, str) or not file_path:
+            raise ValueError("File path is required")
+        if "%" in file_path or "\x00" in file_path:
+            raise ValueError("File path contains invalid characters")
+        normalized = posixpath.normpath(file_path)
+        if not posixpath.isabs(normalized):
+            raise ValueError("File path must be absolute")
+        if not auth_context.is_admin:
+            user_root = f"/users/{auth_context.user_id}/"
+            # Trailing slashes on both sides prevent a /users/alice prefix from
+            # matching /users/alicebob.
+            if not (normalized + "/").startswith(user_root):
+                raise ValueError("File access restricted to user directory")
+        return normalized
 
     async def _sanitize_params(self, params: Dict[str, Any]) -> Dict[str, Any]:
         """Sanitize parameters to prevent injection attacks."""

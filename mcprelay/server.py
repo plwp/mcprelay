@@ -17,7 +17,14 @@ from prometheus_client import (
 
 from .auth import AuthContext, get_current_user, init_auth_manager
 from .config import MCPRelayConfig
-from .license import get_license_manager, init_license_manager
+
+try:
+    # Enterprise (mcprelay-enterprise) license manager, if installed.
+    from .license import get_license_manager, init_license_manager
+except ImportError:
+    # OSS default: no commercial license module — fall back to the no-op
+    # community manager so the core (and its tests) run standalone.
+    from .license_community import get_license_manager, init_license_manager
 from .load_balancer import LoadBalancer
 from .mcp import MCPRequestValidator, MCPResponseSanitizer
 from .plugins import get_plugin_manager, init_plugin_manager
@@ -192,13 +199,18 @@ def create_app(config: MCPRelayConfig) -> FastAPI:
         """Application startup."""
         logger.info("MCPRelay starting up", config=config.model_dump())
 
-        # Initialize license manager
-        license_manager = init_license_manager(
+        # Initialize the license manager. This sets the module global that the
+        # /admin/license endpoint reads via get_license_manager(); the plugin
+        # system is license-agnostic and no longer receives it.
+        init_license_manager(
             config.enterprise.license_key, config.enterprise.license_file
         )
 
-        # Initialize plugin manager
-        plugin_manager = init_plugin_manager(license_manager)
+        # Initialize plugin manager. The plugin system is license-agnostic
+        # (plugins self-validate their own requirements), so it takes no license
+        # manager — the previous `init_plugin_manager(license_manager)` call was
+        # a TypeError left over from that refactor.
+        plugin_manager = init_plugin_manager()
 
         # Load plugins if enabled
         if config.plugins.enabled:

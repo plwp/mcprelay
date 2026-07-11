@@ -68,7 +68,10 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         file: ./coverage.xml
-        fail_ci_if_error: true
+        # A coverage-upload failure (e.g. Codecov 429 rate-limit or a missing
+        # token on a fork) must not red an otherwise-green build — the tests
+        # have already passed by this point. Coverage reporting is advisory.
+        fail_ci_if_error: false
 
   docker:
     runs-on: ubuntu-latest
@@ -85,6 +88,12 @@ jobs:
       with:
         context: .
         push: false
+        # Load the built image into the local docker daemon so the next step
+        # can `docker run mcprelay:test`. Without this the docker-container
+        # buildx driver leaves the result in the build cache only ("No output
+        # specified with docker-container driver") and the run step 125s with
+        # "Unable to find image 'mcprelay:test' locally".
+        load: true
         tags: mcprelay:test
         cache-from: type=gha
         cache-to: type=gha,mode=max

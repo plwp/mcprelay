@@ -9,11 +9,17 @@ from mcprelay.server import create_app
 
 @pytest.fixture
 def client():
-    """Create test client."""
+    """Create test client.
+
+    Context-managed so the app's startup runs (it initialises the auth manager);
+    without it, ``auth_manager`` is None and every protected route 500s instead
+    of authenticating.
+    """
     config = MCPRelayConfig()
     config.auth.api_keys = {"test-key": "test-user"}
     app = create_app(config)
-    return TestClient(app)
+    with TestClient(app) as test_client:
+        yield test_client
 
 
 def test_health_endpoint_no_auth(client):
